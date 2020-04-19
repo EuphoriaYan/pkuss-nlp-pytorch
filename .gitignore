@@ -124,3 +124,6 @@ dmypy.json
 
 # IDEA
 .idea/
+
+# test
+test.py
