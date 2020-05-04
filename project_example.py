@@ -12,6 +12,7 @@ from utils.tokenizer import Tokenizer
 from utils.get_emb import *
 from models.LSTMClassifier import LSTMClassifierNet
 from models.CNNClassifier import CNNClassifierNet
+from models.LSTMAttentionClassifier import LSTMAttentionClassifierNet
 from dataset_readers.single_sent_clf import *
 
 
@@ -42,7 +43,8 @@ def load_data(seq_length):
 def load_model(seq_length, label_len, emb_matrix):
     # TODO: you can choose different model
     # model = CNNClassifierNet(seq_length, label_len, emb_matrix)
-    model = LSTMClassifierNet(seq_length, label_len, emb_matrix, bidirectional=True)
+    # model = LSTMClassifierNet(seq_length, label_len, emb_matrix, bidirectional=True)
+    model = LSTMAttentionClassifierNet(seq_length, label_len, emb_matrix, bidirectional=True)
     if torch.cuda.is_available():
         model.to(torch.device('cuda'))
     optimizer = Adam(model.parameters(), lr=0.001)
