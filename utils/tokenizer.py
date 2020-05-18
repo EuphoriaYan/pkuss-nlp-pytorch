@@ -1,5 +1,7 @@
 
 import collections
+import unicodedata
+import re
 
 
 class Tokenizer:
@@ -7,10 +9,6 @@ class Tokenizer:
     def __init__(self, vocab_list):
         self.unk = 'UNK'
         self.vocab = self.load_vocab(vocab_list)
-        for i, (k, v) in enumerate(self.vocab.items()):
-            if i > 9:
-                break
-            print(k, v)
 
     # 读取词表
     def load_vocab(self, vocab_list):
@@ -18,7 +16,10 @@ class Tokenizer:
         vocab = collections.OrderedDict()
         # 一般我们使用'UNK'来表示词表中不存在的词，放在0号index上
         vocab[self.unk] = 0
-        index = 1
+        # 在Seq2seq里我们还需要用到“SOS”和“EOS”
+        vocab['SOS'] = 1
+        vocab['EOS'] = 2
+        index = 3
         # 依次插入词
         for token in vocab_list:
             token = token.strip()
@@ -39,6 +40,28 @@ class Tokenizer:
     def tokens_to_ids(self, tokens):
         ids_list = list(map(self.token_to_id, tokens))
         return ids_list
+
+    @classmethod
+    def get_vocabs(cls, lines):
+        words = set()
+        for line in lines:
+            for word in line.strip().split(' '):
+                words.add(word)
+        return words
+
+    @classmethod
+    def unicodeToAscii(cls, s):
+        return ''.join(
+            c for c in unicodedata.normalize('NFD', s)
+            if unicodedata.category(c) != 'Mn'
+        )
+
+    @classmethod
+    def normalizeString(cls, s):
+        s = cls.unicodeToAscii(s.lower().strip())
+        s = re.sub(r"([.!?])", r" \1", s)
+        s = re.sub(r"[^a-zA-Z.!?]+", r" ", s)
+        return s
 
 
 if __name__ == '__main__':
