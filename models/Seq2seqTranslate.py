@@ -5,66 +5,59 @@ import torch.nn.functional as F
 
 class EncoderRNN(nn.Module):
     def __init__(self, input_size, hidden_size):
-        super(EncoderRNN, self).__init__()
+        super().__init__()
         self.hidden_size = hidden_size
 
         self.embedding = nn.Embedding(input_size, hidden_size)
         self.gru = nn.GRU(hidden_size, hidden_size, batch_first=True)
 
-    def forward(self, input):
-        embedded = self.embedding(input)
-        output = embedded
-        output, hidden = self.gru(output)
+    def forward(self, x):
+        embedded = self.embedding(x)
+        output, hidden = self.gru(embedded)
         return output, hidden
 
 
-class AttnDecoderRNN(nn.Module):
-    def __init__(self, hidden_size, output_size, dropout_p=0.1, max_length=128):
-        super(AttnDecoderRNN, self).__init__()
+class DecoderRNN(nn.Module):
+    def __init__(self, hidden_size, output_size, dropout_p=0.1):
+        super().__init__()
         self.hidden_size = hidden_size
         self.output_size = output_size
         self.dropout_p = dropout_p
-        self.max_length = max_length
 
         self.embedding = nn.Embedding(self.output_size, self.hidden_size)
-        self.attn = nn.Linear(self.hidden_size, self.max_length)
-        self.attn_combine = nn.Linear(self.hidden_size * 2, self.hidden_size)
         self.dropout = nn.Dropout(self.dropout_p)
         self.gru = nn.GRU(self.hidden_size, self.hidden_size, batch_first=True)
         self.out = nn.Linear(self.hidden_size, self.output_size)
 
-    def forward(self, input, encoder_outputs):
-        embedded = self.embedding(input)
-        embedded = self.dropout(embedded)
-
-        attn_weights = F.softmax(self.attn(embedded), dim=2)
-        attn_applied = torch.bmm(attn_weights,
-                                 encoder_outputs)
-
-        output = torch.cat((embedded, attn_applied), dim=2)
-        output = self.attn_combine(output)
-
-        output = F.relu(output)
-        output, hidden = self.gru(output)
-
-        output = self.out(output)
-        output = F.log_softmax(output, dim=2)
-        return output, hidden, attn_weights
+    def forward(self, x, hidden):
+        embedded = self.dropout(self.embedding(x).unsqueeze(1))
+        output, hidden = self.gru(embedded, hidden)
+        prediction = self.out(output)
+        return prediction, hidden
 
 
 class Seq2seq_translater(nn.Module):
-    def __init__(self, input_size, hidden_size, output_size, max_seq_length):
+    def __init__(self, input_size, hidden_size, output_size, seq_length):
         super(Seq2seq_translater, self).__init__()
         self.encoder = EncoderRNN(input_size, hidden_size)
-        self.decoder = AttnDecoderRNN(hidden_size, output_size, max_length=max_seq_length)
-        self.loss_fct = nn.NLLLoss()
+        self.decoder = DecoderRNN(hidden_size, output_size)
+        self.loss_fct = nn.CrossEntropyLoss()
         self.output_size = output_size
+        self.seq_length = seq_length
 
-    def forward(self, input, y=None):
-        x, _ = self.encoder(input)
-        x, _, _ = self.decoder(input, x)
+    def forward(self, x, y=None):
+        output, hidden = self.encoder(x) # output是(batch_size, seq_length, hidden_size), hidden是(num_layers*num_direction, batch_size, hidden_size)
+        # 用SOS来做Decoder的初始输入
+        decoder_input = x[:, 0]
+        outputs = []
+        for i in range(self.seq_length):
+            output, hidden = self.decoder(decoder_input, hidden)
+            outputs.append(output)
+            pred = output.squeeze().argmax(dim=-1)
+            decoder_input = pred
 
+        total_output = torch.cat(outputs, dim=1)
         if y is not None:
-            return self.loss_fct(x.view(-1, self.output_size), y.view(-1))
+            return self.loss_fct(total_output.view(-1, self.output_size), y.view(-1))
         else:
-            return x
+            return total_output.detach().cpu().numpy().argmax(dim=-1)

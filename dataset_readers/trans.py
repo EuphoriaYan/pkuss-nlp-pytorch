@@ -14,9 +14,3 @@ class En2Fr_Trans:
     def get_train_examples(self):
         train_file_path = 'dataset/translate/eng-fra.txt'
         return self._read_file(train_file_path)
-
-    '''
-    def get_dev_examples(self):
-        dev_file_path = 'dataset/translate/EN2FR/tt.txt'
-        return self._read_file(dev_file_path)
-    '''
