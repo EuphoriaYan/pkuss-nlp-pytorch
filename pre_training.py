@@ -1,6 +1,5 @@
 
 import os
-os.environ['CUDA_VISIBLE_DEVICE'] = "1"
 
 import torch
 import numpy as np
@@ -56,12 +55,12 @@ def train(model, optimizer, train_dataloader, epoch=5):
         print("epoch %d/%d" % (i + 1, epoch))
         model.train()
         total_loss = []
-        for ids, label_ids in train_dataloader:
+        for text_a, text_b in train_dataloader:
             if torch.cuda.is_available():
-                ids = ids.to(torch.device('cuda'))
-                label_ids = label_ids.to(torch.device('cuda'))
+                text_a = text_a.to(torch.device('cuda'))
+                text_b = text_b.to(torch.device('cuda'))
             optimizer.zero_grad()
-            loss = model(ids, label_ids)
+            loss = model(text_a, text_b)
             total_loss.append(loss.item())
             loss.backward()
             optimizer.step()
@@ -75,8 +74,8 @@ def train(model, optimizer, train_dataloader, epoch=5):
 
 if __name__ == '__main__':
     seq_length = 64
-    batch_size = 32
-    epoch = 10
+    batch_size = 64
+    epoch = 30
     train_dataloader, word_cnt_a, word_cnt_b = load_data(seq_length, batch_size)
     model, optimizer = load_model(seq_length, word_cnt_a, word_cnt_b)
     train(model, optimizer, train_dataloader, epoch)

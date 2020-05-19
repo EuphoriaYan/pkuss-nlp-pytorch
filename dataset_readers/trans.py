@@ -2,6 +2,8 @@ from utils.data_utils import *
 
 
 class En2Fr_Trans:
+    def __init__(self, small=False):
+        self.small = small
 
     def _read_file(self, file):
         examples = []
@@ -12,5 +14,8 @@ class En2Fr_Trans:
         return examples
 
     def get_train_examples(self):
-        train_file_path = 'dataset/translate/eng-fra.txt'
+        if self.small:
+            train_file_path = 'dataset/translate/eng-fra-small.txt'
+        else:
+            train_file_path = 'dataset/translate/eng-fra.txt'
         return self._read_file(train_file_path)
