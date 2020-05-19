@@ -59,7 +59,7 @@ def convert_sents_pair(sents_pair, tokenizer_a, tokenizer_b, seq_length):
     for i in sents_pair:
         # 使用tokenizer将字符串转换为数字id
 
-        ids_a = tokenizer_a.tokens_to_ids(['SOS'] + tokenizer_a.normalizeString(i.text_a).split() + ['EOS'])
+        ids_a = tokenizer_a.tokens_to_ids(['BOS'] + tokenizer_a.normalizeString(i.text_a).split() + ['EOS'])
         ids_b = tokenizer_b.tokens_to_ids(tokenizer_b.normalizeString(i.text_b).split() + ['EOS'])
 
         # 我们规定了最大长度，超过了就切断，不足就补齐（一般补unk，也就是这里的[0]，也有特殊补位符[PAD]之类的）

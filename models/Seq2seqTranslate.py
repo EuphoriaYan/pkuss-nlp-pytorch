@@ -70,7 +70,7 @@ class Seq2seq_translater(nn.Module):
         # 但是hidden(以及如果你用LSTM，还多一个cell)，还是原来的样子
         # hidden是(num_layers*num_directions, batch_size, hidden_size)
         output, hidden = self.encoder(x)
-        # 用SOS(START OF SENTENCE)来做Decoder的初始输入，我们可以直接从输入中提取
+        # 用BOS(BEGIN OF SENTENCE)来做Decoder的初始输入，我们可以直接从输入中提取
         # 每一轮的输入的shape就是个(batch_size)，一维的
         decoder_input = x[:, 0]
         # 依次存下每轮的输出

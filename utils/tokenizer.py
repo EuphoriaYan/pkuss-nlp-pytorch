@@ -16,8 +16,8 @@ class Tokenizer:
         vocab = collections.OrderedDict()
         # 一般我们使用'UNK'来表示词表中不存在的词，放在0号index上
         vocab[self.unk] = 0
-        # 在Seq2seq里我们还需要用到“SOS”和“EOS”
-        vocab['SOS'] = 1
+        # 在Seq2seq里我们还需要用到“BOS”和“EOS”
+        vocab['BOS'] = 1
         vocab['EOS'] = 2
         index = 3
         # 依次插入词

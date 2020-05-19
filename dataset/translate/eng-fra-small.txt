@@ -1,0 +1,60 @@
+Go.	Va !
+Run!	Cours !
+Run!	Courez !
+Wow!	Ça alors !
+Fire!	Au feu !
+Help!	À l'aide !
+Jump.	Saute.
+Stop!	Ça suffit !
+Stop!	Stop !
+Stop!	Arrête-toi !
+Wait!	Attends !
+Wait!	Attendez !
+I see.	Je comprends.
+I try.	J'essaye.
+I won!	J'ai gagné !
+I won!	Je l'ai emporté !
+Oh no!	Oh non !
+Attack!	Attaque !
+Attack!	Attaquez !
+Cheers!	Santé !
+Cheers!	À votre santé !
+Cheers!	Merci !
+Get up.	Lève-toi.
+Got it!	J'ai pigé !
+Got it!	Compris !
+Got it?	Pigé ?
+Got it?	Compris ?
+Got it?	T'as capté ?
+Hop in.	Monte.
+Hop in.	Montez.
+Hug me.	Serre-moi dans tes bras !
+Hug me.	Serrez-moi dans vos bras !
+I fell.	Je suis tombée.
+I fell.	Je suis tombé.
+I know.	Je sais.
+I left.	Je suis parti.
+I left.	Je suis partie.
+I lost.	J'ai perdu.
+I'm 19.	J'ai 19 ans.
+I'm OK.	Je vais bien.
+I'm OK.	Ça va.
+Listen.	Écoutez !
+No way!	Impossible !
+No way!	En aucun cas.
+No way!	C'est hors de question !
+No way!	Il n'en est pas question !
+No way!	C'est exclu !
+No way!	En aucune manière !
+No way!	Hors de question !
+Really?	Vraiment ?
+Really?	Vrai ?
+Really?	Ah bon ?
+Thanks.	Merci !
+We try.	On essaye.
+We won.	Nous avons gagné.
+We won.	Nous gagnâmes.
+We won.	Nous l'avons emporté.
+We won.	Nous l'emportâmes.
+Ask Tom.	Demande à Tom.
+Awesome!	Fantastique !
