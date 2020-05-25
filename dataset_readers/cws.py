@@ -19,3 +19,6 @@ class Zuozhuan_Cws:
     def get_dev_examples(self):
         dev_file_path = 'dataset/cws/zuozhuan/tt.txt'
         return self._read_file(dev_file_path)
+
+    def get_labels(self):
+        return ['B', 'I', ]
